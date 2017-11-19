@@ -17,9 +17,8 @@ public class MainActivity extends AppCompatActivity {
 /*
 public void aleatDetail(String glass,String bottle){
         AlertDialog.Builder builder = new AlertDialog.Builder(User_Main.this);
-        builder.setTitle("                      รู้หรือไม่?");
-        builder.setMessage("\nขวด 1 ขวด ลดคาร์บอนไดออกไซด์ได้ " +bottle+ " กรัมCO2\n" +
-                "\nแก้ว 1 ใบ  ลดคาร์บอนไดออกไซด์ได้ "+ glass +" กรัมCO2");
+        builder.setTitle("                      abc");
+        builder.setMessage("fgfg");
         builder.setNegativeButton("ตกลง", null);
         builder.show();
 
