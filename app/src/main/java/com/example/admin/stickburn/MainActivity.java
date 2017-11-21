@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Button B_confirm ;
     EditText w , h , age , name;
     // sex
-
+//ik
     CallFucntion c = new CallFucntion();
     double bmi_value = 0;
     String bmi_result = "";
