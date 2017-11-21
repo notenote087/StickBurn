@@ -1,5 +1,9 @@
 package com.example.admin.stickburn;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.support.v7.app.AlertDialog;
+
 /**
  * Created by admin on 17/11/2560.
  */
@@ -54,6 +58,8 @@ class CallFucntion {
 
 
     }
+
+
 
     //public
 
