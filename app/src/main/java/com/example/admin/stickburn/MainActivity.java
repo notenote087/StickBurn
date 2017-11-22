@@ -2,6 +2,7 @@ package com.example.admin.stickburn;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -62,7 +63,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // findViewID();
-                prg = new ProgressDialog(MainActivity.this);
+
+/*              prg = new ProgressDialog(MainActivity.this);
                 prg.setMessage("รอสักครู่...");
                 prg.setCancelable(false);
                 prg.show();
@@ -71,12 +73,18 @@ public class MainActivity extends AppCompatActivity {
                 int  hi = Integer.parseInt(h.getText().toString()) ;
                 bmi_value =  c.CalBMI(wi,hi);
                 bmi_result  = c.ResultBMI(bmi_value);
-                confirm_button();
+                confirm_button();*/
+
+                btnTest();
+
             }
         });
 
     }
-
+    private void btnTest (){
+        Intent intent = new Intent(this, Detail.class);
+        startActivity(intent);
+    }
     private void confirm_button (){
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
