@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     CallFucntion c = new CallFucntion();
     double bmi_value = 0;
     String bmi_result = "";
-
+//
     SharedPreferences share;
     SharedPreferences.Editor editor;
     private static final String Pref = "Pref";
