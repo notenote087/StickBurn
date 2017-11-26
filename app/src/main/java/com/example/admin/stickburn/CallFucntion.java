@@ -34,7 +34,7 @@ class CallFucntion {
 
     }
 
-    public double BMR(double h , double w , String sex , int age){ // Callorru ที่ต้องการแตค่ลพวัน
+    public double BMR(int h , int w , String sex , int age){ // Callorru ที่ต้องการแตค่ลพวัน
         double callorry = 0.0;
 
         // man 10 * w + 6.25 * h  - 5 * age + 5

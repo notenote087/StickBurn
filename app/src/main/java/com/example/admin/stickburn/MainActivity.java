@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,14 +29,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+
     Button B_confirm ;
-    EditText w , h , age , name;
-    // sex
-//ik
+    EditText w , h , age , name ;
+
+    RadioButton male,female ;
+    RadioGroup rg ;
+
     CallFucntion c = new CallFucntion();
     double bmi_value = 0;
     String bmi_result = "";
@@ -52,108 +59,152 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findID();
-       /* share = getSharedPreferences(Pref, Context.MODE_PRIVATE);
-        editor= share.edit();
-        editor.putString("checkAlert","1");
-        editor.commit();
-*/
-        //checkid = share.getString("id","") ;
+        prg = new ProgressDialog(MainActivity.this);
+        prg.setMessage("รอสักครู่...");
+        prg.setCancelable(false);
 
         B_confirm.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                // findViewID();
 
-/*              prg = new ProgressDialog(MainActivity.this);
-                prg.setMessage("รอสักครู่...");
-                prg.setCancelable(false);
+                 findID();
                 prg.show();
+              click();
 
-                int  wi = Integer.parseInt(w.getText().toString()) ;
-                int  hi = Integer.parseInt(h.getText().toString()) ;
-                bmi_value =  c.CalBMI(wi,hi);
-                bmi_result  = c.ResultBMI(bmi_value);
-                confirm_button();*/
 
-                btnTest();
 
             }
         });
 
     }
-    private void btnTest (){
-        Intent intent = new Intent(this, Detail.class);
-        startActivity(intent);
-    }
-    private void confirm_button (){
 
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
+    private void click(){
+
+        String n = name.getText().toString();
+        String hei = h.getText().toString();
+        String wei = w.getText().toString();
+        String ag_e = age.getText().toString();
+        String sex = getSex();
+
+       if(sex.isEmpty() && n.isEmpty()&&hei.isEmpty()&&wei.isEmpty()&&ag_e.isEmpty()){
+           Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show(); // if อยู่ภายใต้ create ต้องใส่ MainActivity.this
+
+       }else {
+
+                  /*  intent.putExtra("name",n);
+                  //  Toast.makeText(MainActivity.this, n, Toast.LENGTH_SHORT).show();
+                    intent.putExtra("h",hei);
+                    intent.putExtra("w",wei);
+                    intent.putExtra("age",ag_e);
+                    intent.putExtra("sex",sex);*/
+           //       startActivity(intent);
+           //
+           share = getSharedPreferences(Pref, Context.MODE_PRIVATE);
+           editor = share.edit();
+           editor.putString("name", n);
+           editor.putString("hei", hei);
+           editor.putString("wei", wei);
+           editor.putString("age", ag_e);
+           editor.putString("sex", sex);
+
+
+           RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
             /* JsonObjectRequest jsonObjReq = new JsonObjectRequest(Method.GET,
             urlJsonObj, null, new Response.Listener<JSONObject>() */
-            StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+           StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
 
-              //  JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, response.toString());
-                        try {
+               //  JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, null, new Response.Listener<JSONObject>() {
+               @Override
+               public void onResponse(String response) {
+                   Log.d(TAG, response.toString());
+                   try {
 
-                            prg.hide();
-                            h.setText("");
-                            w.setText("");
-                            JSONObject j = new JSONObject(response.toString());
-                            //   JSONObject j = response.getJSONObject("dataUser");
-                            String userID = j.getString("userID");
-                            // j.getJSONObject("dataUser");
+                       prg.hide();
+                       h.setText("");
+                       w.setText("");
+                       JSONObject j = new JSONObject(response.toString());
+                       //   JSONObject j = response.getJSONObject("dataUser");
+                       String userID = j.getString("userID");
+                       // j.getJSONObject("dataUser");
 
-                            String result = j.getString("result");
-                         //   Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
+                       String result = j.getString("result");
+                       Toast.makeText(getApplicationContext(), result + " " + userID, Toast.LENGTH_LONG).show();
 
+                       editor.putString("id", userID);
+                       editor.commit();
 
-                            share = getSharedPreferences(Pref, Context.MODE_PRIVATE);
-                            editor= share.edit();
-                            editor.putString("userID",userID);
-                            editor.commit();
+                       Intent intent = new Intent(MainActivity.this, Detail.class);
+                       startActivity(intent);
 
-                        } catch (JSONException e) {
-                            prg.hide();
-                            //  textviewShow.setText(e.getMessage());
-                              Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-                            Log.d("Whats wrong?", e.toString());
-                            Log.e("JSON Parser", "Error parsing data " + e.toString());
-                            // textviewShow.setText(e.toString());
+                   } catch (JSONException e) {
+                       prg.hide();
+                       //  textviewShow.setText(e.getMessage());
+                       //      Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                       Log.d("Whats wrong?", e.toString());
+                       Log.e("JSON Parser", "Error parsing data " + e.toString());
+                       // textviewShow.setText(e.toString());
 
-                            //intent
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        VolleyLog.d(TAG, error.toString());
+                       //intent
+                   }
+               }
+           }, new Response.ErrorListener() {
+               @Override
+               public void onErrorResponse(VolleyError error) {
+                   VolleyLog.d(TAG, error.toString());
 
-                        prg.hide();
-                        alertDetail("ผิดพลาด");
-                        h.setText("");
-                        w.setText("");
-                        name.setText("");
-                        age.setText("");
-
-
-                    }
-                }) {
-                    @Override
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("w", w.getText().toString());
-                        params.put("h", h.getText().toString());
-                        params.put("username", name.getText().toString());
-                        params.put("age", age.getText().toString());
-                        return params;
+                   prg.hide();
+                   alertDetail("ผิดพลาด");
+                   h.setText("");
+                   w.setText("");
+                   name.setText("");
+                   age.setText("");
 
 
-                    }
-                };requestQueue.add(request);
-            }
+               }
+           }) {
+               @Override
+               protected Map<String, String> getParams() {
+                   Map<String, String> params = new HashMap<String, String>();
+                   params.put("w", w.getText().toString());
+                   params.put("h", h.getText().toString());
+                   params.put("username", name.getText().toString());
+                   params.put("age", age.getText().toString());
+                   return params;
+
+
+               }
+           };
+           requestQueue.add(request);
+       }
+
+        }
+
+
+    private String getSex (){
+
+
+
+     if (male.isChecked()) {
+    //     Toast.makeText(this, "ผู้ชาย", Toast.LENGTH_SHORT).show();    // อยู่นอก create ใส่ this ได้
+        /* Intent intent = new Intent(this, Detail.class);
+         startActivity(intent);*/
+        return "ชาย" ;
+     }
+
+     else if (female.isChecked()){
+        // Toast.makeText(this, "ผู้หญิง", Toast.LENGTH_SHORT).show();
+
+       /*  Intent intent = new Intent(this, Detail.class);
+         startActivity(intent);*/
+         return "หญิง" ;
+     }
+     else {
+
+        // Toast.makeText(this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();
+         return "" ;
+     }
+
+    }
 
 
     private void findID(){
@@ -162,6 +213,10 @@ public class MainActivity extends AppCompatActivity {
         h = (EditText) findViewById(R.id.h);
        age = (EditText) findViewById(R.id.age);
       name = (EditText) findViewById(R.id.editText4);
+
+      female = (RadioButton) findViewById(R.id.radioFemale) ;
+      male = (RadioButton) findViewById(R.id.radioMale);
+      rg = (RadioGroup) findViewById(R.id.radioSex);
 
     }
 
@@ -175,4 +230,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
 }

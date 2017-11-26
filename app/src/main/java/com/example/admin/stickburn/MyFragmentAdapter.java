@@ -16,7 +16,10 @@ public class MyFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0: return new FragmentDatail();
+            case 0:
+
+
+                return new FragmentDatail();
             case 1: return new FragmentHistory();
             default: return new FragmentDatail();
         }
