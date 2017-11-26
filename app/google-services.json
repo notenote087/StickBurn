@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "940229786484",
+    "firebase_url": "https://stickburn-f1baf.firebaseio.com",
+    "project_id": "stickburn-f1baf",
+    "storage_bucket": "stickburn-f1baf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940229786484:android:37a0bb7c79fa6297",
+        "android_client_info": {
+          "package_name": "com.example.admin.stickburn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940229786484-fls0g21ll8d9bro8l2vu0239q9atuj15.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSC1kg2GGC7mfwu8U_qWwqx-ngsC6b1yc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

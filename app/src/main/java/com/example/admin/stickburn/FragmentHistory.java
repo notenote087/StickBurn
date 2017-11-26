@@ -1,5 +1,7 @@
 package com.example.admin.stickburn;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -22,10 +25,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class FragmentHistory extends Fragment {
-    DatabaseReference firebaseReference;
+    DatabaseReference mDB;
     DatabaseReference dref;
     ListView l;
+    TextView  t;
+
     ArrayList<String> myArrList=new ArrayList<>();
+    SharedPreferences share ;
+
     public FragmentHistory(){
 
     }
@@ -33,8 +40,28 @@ public class FragmentHistory extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_fragment_history, container, false);
 
+        t = (TextView) rootView.findViewById(R.id.result);
+        share = this.getActivity().getSharedPreferences("Pref", Context.MODE_PRIVATE);
 
 
+       String id = share.getString("id","no") ;
+      mDB = FirebaseDatabase.getInstance().getReference().child(id) ;//.child("leixoes");
+        mDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {  // ข้อมูลจะยุนี้ dataSnapshot
+                String data = "";
+                for (DataSnapshot childSnap : dataSnapshot.getChildren()) { // ตราบใดที่ getChilderen ได้คือยังมีข้อมูล
+                    save_history user = childSnap.getValue(save_history.class);
+                    data += user.date_ + " " + user.food + " " + user.cal + "\n";
+                }
+                t.setText(data);
+            }   // เมื่อมีการแอด หรือเปลี่ยนแปลงข้อมูงจะทำที่นี้
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -42,6 +69,7 @@ public class FragmentHistory extends Fragment {
 
         return  rootView;
     }
+
 
 
 

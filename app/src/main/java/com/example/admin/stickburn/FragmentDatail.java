@@ -1,5 +1,7 @@
 package com.example.admin.stickburn;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,6 +48,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class FragmentDatail extends Fragment {
     DatabaseReference mDB ;
+    sqlLite sql_class ;
+    String cal_share ;
     String food ;
     int cal_json ;
 
@@ -58,7 +63,9 @@ public class FragmentDatail extends Fragment {
     int a2;
     double w2,h2;
     String id , cal_getString;
-    SharedPreferences share ;
+
+    SharedPreferences share;
+    SharedPreferences.Editor editor;
     private ProgressDialog prg ;
 
     public FragmentDatail(){
@@ -103,7 +110,7 @@ public class FragmentDatail extends Fragment {
         String a = share.getString("age","0");
         String s = share.getString("sex","0");
         String n = share.getString("name","0");
-
+        cal_share = share.getString("callory_day","0") ;
 
         name = (TextView) rootView.findViewById(R.id.name_f);
         name.setText("ชื่อ :" + n);
@@ -134,8 +141,11 @@ public class FragmentDatail extends Fragment {
 
 
         cal_day = (TextView) rootView.findViewById(R.id.cal_day);
-        cal_day.setText("คุณได้รับไปแล้ว: "+callory_day);
 
+        callory_day = Double.parseDouble(cal_share);
+
+        cal_day.setText("คุณได้รับไปแล้ว: "+callory_day);
+       // cal_day.setText("คุณได้รับไปแล้ว: "+cal_share);
         confirm = (Button) rootView.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener()
         {
@@ -153,6 +163,49 @@ public class FragmentDatail extends Fragment {
 
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Double cc = callory_day;
+      /*  if (cc !=null) {
+            Toast.makeText(getActivity(), Double.toString(callory_day), Toast.LENGTH_SHORT).show();
+        }*/
+
+        editor = share.edit();
+       editor.putString("callory_day", Double.toString(callory_day));
+
+       editor.commit();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        editor = share.edit();
+
+        editor.putString("callory_day", Double.toString(callory_day));
+
+
+       editor.commit();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //cal_share = share.getString("callory_day","0") ;
+
+    }
+
+    public void alert2(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(" StickBurn");
+        builder.setMessage("คุณกินเยอะเกินไปแล้วนะ !!");
+        builder.setNegativeButton("ตกลง", null);
+
+        builder.show();
+    }
+
     public void alertDetail(String text){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(" StickBurn");
@@ -166,12 +219,18 @@ public class FragmentDatail extends Fragment {
         builder.setNegativeButton("ยืนยัน", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 callory_day += cal_json;
-                cal_day.setText("คุณได้รับไปแล้ว: "+callory_day);
+
                 DateFormat df = new SimpleDateFormat("yyyy/MM/dd  'at' HH/mm/ss");
                 String date = df.format(Calendar.getInstance().getTime());
 
+                if (callory_day > bmr_result){
+                    alert2();
+                }
 
 
+
+
+                cal_day.setText("คุณได้รับไปแล้ว: "+ callory_day);
 
                 mDB = FirebaseDatabase.getInstance().getReference(id); // อ้างอิง ถ้าไม่มใีส่อะไรจะอ้างอิงไปที่ Root Node ถ้าใส่ ที่ Referrenc คือที่ๆจะอ้างอิง
                 final save_history test = new save_history(food ,  cal_getString,date);
@@ -181,6 +240,19 @@ public class FragmentDatail extends Fragment {
                 DateFormat df2 = new SimpleDateFormat("HHmmss");
                 mDB.child(id + "_"+df2.format(Calendar.getInstance().getTime())).setValue(test);
 
+                Intent intent1 = new Intent(getActivity(),FragmentDatail.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(),0,intent1, PendingIntent.FLAG_CANCEL_CURRENT);
+                NotificationCompat.Builder builder =
+                        new NotificationCompat.Builder(getActivity().getApplicationContext())
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("Stickburn")
+                                .setContentText("อย่าลืมกิน "+ food +" ละ")
+                                .setAutoCancel(true)
+                                .setContentIntent(pendingIntent);
+
+                NotificationManager notificationManager =
+                        (NotificationManager) getActivity().getSystemService(getActivity().NOTIFICATION_SERVICE);
+                notificationManager.notify(1, builder.build());
 
             } });
 
@@ -256,5 +328,7 @@ public class FragmentDatail extends Fragment {
         };
         requestQueue.add(request);
     }
+
+
 
 }
