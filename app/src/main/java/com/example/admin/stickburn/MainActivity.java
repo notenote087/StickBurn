@@ -91,10 +91,16 @@ public class MainActivity extends AppCompatActivity {
         String ag_e = age.getText().toString();
         String sex = getSex();
 
-       if(sex.isEmpty() && n.isEmpty()&&hei.isEmpty()&&wei.isEmpty()&&ag_e.isEmpty()){
-           Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show(); // if อยู่ภายใต้ create ต้องใส่ MainActivity.this
+       if(sex.isEmpty()){
+            Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show(); // if อยู่ภายใต้ create ต้องใส่ MainActivity.this
+        }
+        else if(n.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  }
+       else if(hei.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  }
+       else if(wei.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  }
 
-       }else {
+       else if(ag_e.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  }
+
+        else {
 
                   /*  intent.putExtra("name",n);
                   //  Toast.makeText(MainActivity.this, n, Toast.LENGTH_SHORT).show();
@@ -133,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                        // j.getJSONObject("dataUser");
 
                        String result = j.getString("result");
-                       Toast.makeText(getApplicationContext(), result + " " + userID, Toast.LENGTH_LONG).show();
+                      // Toast.makeText(getApplicationContext(), result + " " + userID, Toast.LENGTH_LONG).show();
 
                        editor.putString("id", userID);
                        editor.commit();

@@ -129,6 +129,7 @@ public class FragmentDatail extends Fragment {
         int w_bmi = Integer.parseInt(w);
         int h_bmi = Integer.parseInt(h);
        double resultBMI =  c.CalBMI(h_bmi,w_bmi);
+        //Toast.makeText(getActivity(), Double.toString(resultBMI), Toast.LENGTH_SHORT).show();
        String bmi_text = c.ResultBMI(resultBMI);
 
         bmi = (TextView) rootView.findViewById(R.id.bmi_f);

@@ -3,6 +3,7 @@ package com.example.admin.stickburn;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
 /**
  * Created by admin on 17/11/2560.
@@ -25,9 +26,9 @@ class CallFucntion {
         String resultBMI = "";
 
         if(result < 17){ resultBMI = "ดัชนีมวลกายคือ ผอม" ;}
-        else if(result >=17 ||result <=18.4){ resultBMI = "ัดัชนีมวลกายคือ สมส่วน";}
-        else if(result >= 18.5 || result <= 24.9){resultBMI = "ดัชนีมวลกายคือ เริ่มจะอวบ" ;}
-        else if(result >= 25 || result <=29.9){resultBMI = "ดัชนีมวลกายคือ อวบระยะสุดท้าย" ;}
+        else if(result >=17 && result <=18.4){ resultBMI = "ัดัชนีมวลกายคือ สมส่วน";}
+        else if(result >= 18.5 && result <= 24.9){resultBMI = "ดัชนีมวลกายคือ เริ่มจะอวบ" ;}
+        else if(result >= 25 && result <=29.9){resultBMI = "ดัชนีมวลกายคือ อวบระยะสุดท้าย" ;}
         else if(result > 30){ resultBMI = "ดัชนีมวลกายคือ อ้วนอันตราย" ;}
         return resultBMI;
 
