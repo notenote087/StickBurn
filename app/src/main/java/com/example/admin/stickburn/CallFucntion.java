@@ -24,8 +24,8 @@ class CallFucntion {
     public String ResultBMI(double result){
         String resultBMI = "";
 
-        if(result < 17){ resultBMI = "ดัชนีมวลการคือ ผอม" ;}
-        else if(result >=17 ||result <=18.4){ resultBMI = "ัดัชนีมวลการคือ สมส่วน";}
+        if(result < 17){ resultBMI = "ดัชนีมวลกายคือ ผอม" ;}
+        else if(result >=17 ||result <=18.4){ resultBMI = "ัดัชนีมวลกายคือ สมส่วน";}
         else if(result >= 18.5 || result <= 24.9){resultBMI = "ดัชนีมวลกายคือ เริ่มจะอวบ" ;}
         else if(result >= 25 || result <=29.9){resultBMI = "ดัชนีมวลกายคือ อวบระยะสุดท้าย" ;}
         else if(result > 30){ resultBMI = "ดัชนีมวลกายคือ อ้วนอันตราย" ;}
@@ -41,8 +41,8 @@ class CallFucntion {
         // woman 10 * w + 6.25 * h - 5 * age - 161
         switch (sex){
 
-            case "man": callorry =  10 * w + 6.25 * h - 5 * age + 5 ;  break ;
-            case "girl" : callorry = 10 * w + 6.25 * h - 5 * age - 161 ;  break ;
+            case "ชาย": callorry =  10 * w + 6.25 * h - 5 * age + 5 ;  break ;
+            case "หญิง" : callorry = 10 * w + 6.25 * h - 5 * age - 161 ;  break ;
         }
 
         return callorry ;

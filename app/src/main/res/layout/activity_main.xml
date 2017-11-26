@@ -108,13 +108,13 @@
             android:id="@+id/radioMale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="male" />
+            android:text="ผู้ชาย" />
 
         <RadioButton
             android:id="@+id/radioFemale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="female" />
+            android:text="ผู้หญิง" />
 
     </RadioGroup>
 

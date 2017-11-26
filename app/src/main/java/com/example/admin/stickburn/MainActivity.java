@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     RadioGroup rg ;
 
     CallFucntion c = new CallFucntion();
+    sqlLite sql ;
+
     double bmi_value = 0;
     String bmi_result = "";
 //
@@ -62,6 +64,9 @@ public class MainActivity extends AppCompatActivity {
         prg = new ProgressDialog(MainActivity.this);
         prg.setMessage("รอสักครู่...");
         prg.setCancelable(false);
+
+        sql = new sqlLite(this, "stickburn.db", null, 1);
+
 
         B_confirm.setOnClickListener(new View.OnClickListener(){
             @Override
