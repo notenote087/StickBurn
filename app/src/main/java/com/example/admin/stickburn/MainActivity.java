@@ -1,5 +1,6 @@
 package com.example.admin.stickburn;
 
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +34,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-
+    TextToSpeech sp ;
+    String speak = "";
+    int result_sp ;
 
     Button B_confirm ;
     EditText w , h , age , name ;
@@ -78,8 +81,23 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
             }
         });
+
+        sp = new TextToSpeech(MainActivity.this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+
+                    result_sp = sp.setLanguage(new Locale("th"));  // Not support Locale.THAI
+                    //      Toast.makeText(getActivity(), "No Error", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
 
     }
 
@@ -94,11 +112,11 @@ public class MainActivity extends AppCompatActivity {
        if(sex.isEmpty()){
             Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show(); // if อยู่ภายใต้ create ต้องใส่ MainActivity.this
         }
-        else if(n.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  }
-       else if(hei.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  }
-       else if(wei.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  }
+        else if(n.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  prg.hide(); }
+       else if(hei.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  prg.hide(); }
+       else if(wei.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  prg.hide(); }
 
-       else if(ag_e.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  }
+       else if(ag_e.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show(); prg.hide();  }
 
         else {
 
@@ -144,8 +162,11 @@ public class MainActivity extends AppCompatActivity {
                        editor.putString("id", userID);
                        editor.commit();
 
+
+                       speak("ยินดีต้อนรับคุณ " + name.getText().toString());
                        Intent intent = new Intent(MainActivity.this, Detail.class);
                        startActivity(intent);
+                       finish();
 
                    } catch (JSONException e) {
                        prg.hide();
@@ -249,7 +270,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        if(sp !=null){
+            sp.stop();
+            sp.shutdown();
+
+        }
         super.onPause();
     }
+
+    public void speak(String text){
+        if (text == null || text == "")  Toast.makeText(MainActivity.this,"Nulll", Toast.LENGTH_SHORT).show();
+            //else sp.speak(text,TextToSpeech.QUEUE_FLUSH,null);QUEUE_ADD
+        else sp.speak(text,TextToSpeech.QUEUE_ADD,null);
+    }
+
+
+
 
 }

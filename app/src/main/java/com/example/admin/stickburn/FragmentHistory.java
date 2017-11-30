@@ -2,6 +2,7 @@ package com.example.admin.stickburn;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,10 +28,14 @@ import java.util.ArrayList;
 public class FragmentHistory extends Fragment {
     DatabaseReference mDB;
     DatabaseReference dref;
-    ListView l;
+
     TextView  t;
+    ListView l;
+
 
     ArrayList<String> myArrList=new ArrayList<>();
+
+
     SharedPreferences share ;
 
     public FragmentHistory(){
@@ -38,8 +43,8 @@ public class FragmentHistory extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_fragment_history, container, false);
-
+         View rootView = inflater.inflate(R.layout.activity_fragment_history, container, false);
+        l = (ListView) rootView.findViewById(R.id.lv);
         t = (TextView) rootView.findViewById(R.id.result);
         share = this.getActivity().getSharedPreferences("Pref", Context.MODE_PRIVATE);
 
@@ -54,7 +59,15 @@ public class FragmentHistory extends Fragment {
                     save_history user = childSnap.getValue(save_history.class);
                     data += user.date_ + " " + "\n" + user.food + " " + user.cal +" กิโลแคลอรี่ "+ "\n"+"\n";
                 }
-                t.setText(data);
+               // t.setText(data);
+
+                myArrList.add(data);
+                ArrayAdapter itemsAdapter = new ArrayAdapter(getActivity(),
+                        android.R.layout.simple_list_item_1,
+                        myArrList);
+
+                l.setAdapter(itemsAdapter);
+
             }   // เมื่อมีการแอด หรือเปลี่ยนแปลงข้อมูงจะทำที่นี้
 
             @Override
@@ -69,9 +82,6 @@ public class FragmentHistory extends Fragment {
 
         return  rootView;
     }
-
-
-
 
 
 }
