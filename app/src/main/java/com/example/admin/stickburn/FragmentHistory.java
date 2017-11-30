@@ -52,7 +52,7 @@ public class FragmentHistory extends Fragment {
                 String data = "";
                 for (DataSnapshot childSnap : dataSnapshot.getChildren()) { // ตราบใดที่ getChilderen ได้คือยังมีข้อมูล
                     save_history user = childSnap.getValue(save_history.class);
-                    data += user.date_ + " " + user.food + " " + user.cal + "\n";
+                    data += user.date_ + " " + "\n" + user.food + " " + user.cal +" กิโลแคลอรี่ "+ "\n"+"\n";
                 }
                 t.setText(data);
             }   // เมื่อมีการแอด หรือเปลี่ยนแปลงข้อมูงจะทำที่นี้

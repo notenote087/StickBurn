@@ -113,18 +113,18 @@ public class FragmentDatail extends Fragment {
         cal_share = share.getString("callory_day","0") ;
 
         name = (TextView) rootView.findViewById(R.id.name_f);
-        name.setText("ชื่อ :" + n);
+        name.setText("ชื่อ : " + n);
         age = (TextView) rootView.findViewById(R.id.age_f);
-        age.setText("อายุ :"+a);
+        age.setText("อายุ : "+a);
 
         sex = (TextView) rootView.findViewById(R.id.sex_f);
-        sex.setText("เพศ :"+s);
+        sex.setText("เพศ : "+s);
 
         ww = (TextView) rootView.findViewById(R.id.w_f);
-        ww.setText("น้ำหนัก :"+ w);
+        ww.setText("น้ำหนัก : "+ w);
 
         hh = (TextView) rootView.findViewById(R.id.h_f);
-        hh.setText("ส่วนสูง :" +h);
+        hh.setText("ส่วนสูง : " +h);
 
         int w_bmi = Integer.parseInt(w);
         int h_bmi = Integer.parseInt(h);

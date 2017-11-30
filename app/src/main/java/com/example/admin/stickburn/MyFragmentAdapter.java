@@ -29,7 +29,7 @@ public class MyFragmentAdapter extends FragmentStatePagerAdapter {
     public int getCount() {return 2;}
 
     public CharSequence getPageTitle(int position){
-        String[] tabs = {"Datail", "History"};
+        String[] tabs = {"Detail", "History"};
         return tabs[position];
     }
 }
