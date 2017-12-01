@@ -45,7 +45,7 @@ public class FragmentHistory extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
          View rootView = inflater.inflate(R.layout.activity_fragment_history, container, false);
         l = (ListView) rootView.findViewById(R.id.lv);
-        t = (TextView) rootView.findViewById(R.id.result);
+       // t = (TextView) rootView.findViewById(R.id.result);
         share = this.getActivity().getSharedPreferences("Pref", Context.MODE_PRIVATE);
 
 
@@ -54,6 +54,7 @@ public class FragmentHistory extends Fragment {
         mDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {  // ข้อมูลจะยุนี้ dataSnapshot
+                myArrList.clear();
                 String data = "";
                 for (DataSnapshot childSnap : dataSnapshot.getChildren()) { // ตราบใดที่ getChilderen ได้คือยังมีข้อมูล
                     save_history user = childSnap.getValue(save_history.class);

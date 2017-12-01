@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         String sex = getSex();
 
        if(sex.isEmpty()){
-            Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show(); // if อยู่ภายใต้ create ต้องใส่ MainActivity.this
+            Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show(); prg.hide();  // if อยู่ภายใต้ create ต้องใส่ MainActivity.this
         }
         else if(n.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  prg.hide(); }
        else if(hei.isEmpty()){Toast.makeText(MainActivity.this, "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();  prg.hide(); }
@@ -217,17 +217,12 @@ public class MainActivity extends AppCompatActivity {
 
 
      if (male.isChecked()) {
-    //     Toast.makeText(this, "ผู้ชาย", Toast.LENGTH_SHORT).show();    // อยู่นอก create ใส่ this ได้
-        /* Intent intent = new Intent(this, Detail.class);
-         startActivity(intent);*/
+
         return "ชาย" ;
      }
 
      else if (female.isChecked()){
-        // Toast.makeText(this, "ผู้หญิง", Toast.LENGTH_SHORT).show();
 
-       /*  Intent intent = new Intent(this, Detail.class);
-         startActivity(intent);*/
          return "หญิง" ;
      }
      else {
