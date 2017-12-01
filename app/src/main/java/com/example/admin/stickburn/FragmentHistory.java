@@ -29,7 +29,7 @@ public class FragmentHistory extends Fragment {
     DatabaseReference mDB;
     DatabaseReference dref;
 
-    TextView  t;
+   // TextView  t;
     ListView l;
 
 

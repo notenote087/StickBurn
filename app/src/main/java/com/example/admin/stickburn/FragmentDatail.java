@@ -105,7 +105,7 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
 
 
         CallFucntion c = new CallFucntion();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true); // ทำให้ แอพ ทำงานแบบ Offine ได้ด้วย
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true); // ทำให้ แอพ ทำงานแบบ Offine ได้ด้วย
 
         prg = new ProgressDialog(getActivity());
         prg.setMessage("รอสักครู่...");
