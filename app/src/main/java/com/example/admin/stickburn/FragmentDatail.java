@@ -1,5 +1,6 @@
 package com.example.admin.stickburn;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -7,15 +8,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.SystemClock;
+import android.speech.tts.TextToSpeech;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +41,9 @@ import org.w3c.dom.Text;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -46,7 +55,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 
-public class FragmentDatail extends Fragment {
+public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListener {
     DatabaseReference mDB ;
     sqlLite sql_class ;
     String cal_share ;
@@ -54,7 +63,7 @@ public class FragmentDatail extends Fragment {
     int cal_json ;
 
     TextView name,age,sex,hh,ww , bmi ,bmr , cal_day;
-    Button confirm ;
+    Button confirm , foodinsert ;
 
     double callory_day = 0 ;
     double bmr_result =0;
@@ -66,7 +75,15 @@ public class FragmentDatail extends Fragment {
 
     SharedPreferences share;
     SharedPreferences.Editor editor;
+    PendingIntent alarmintent ;
+    AlarmManager alarmManager ;
+
+
     private ProgressDialog prg ;
+    TextToSpeech sp ;
+    String speak = "";
+    int result_sp ;
+
 
     public FragmentDatail(){
 
@@ -79,6 +96,13 @@ public class FragmentDatail extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState){
         final View rootView =  inflater.inflate(R.layout.activity_fragment_datail, container, false);
+
+
+       /* tts = new TextToSpeech(MainActivity,this, this, "com.google.android.tts");
+
+        tts.setLanguage(new Locale("th")   ;
+*/
+
 
         CallFucntion c = new CallFucntion();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true); // ทำให้ แอพ ทำงานแบบ Offine ได้ด้วย
@@ -150,19 +174,87 @@ public class FragmentDatail extends Fragment {
         confirm = (Button) rootView.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener()
         {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v)
             {
               prg.show();
                 json_request();
+                setAlarm(20,1);
+                // myReciever ;
+               /* Intent intent = new Intent(getActivity(),myReceiver.class);
+                alarmintent = PendingIntent.getBroadcast(getActivity(),0,intent,0);
+                alarmManager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
+                // alarmManager.set(AlarmManager.RTC,calendar.getTimeInMillis(),alarmintent);
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME,
+                        SystemClock.elapsedRealtime()+ 2 *1000,alarmintent);*/
+            }
+        });
+
+        foodinsert = (Button) rootView.findViewById(R.id.foodinsert);
+        foodinsert.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onClick(View v) {
+                  DialogInput();
+
+                    setAlarm(40,1);
+                   /* Date currentTime = Calendar.getInstance().getTime();
+
+                    int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                    String hhh = Integer.toString(hour);
+                    alertDetail(hhh);*/
+                   // speak = "ยินดีต้อนรับ";// editText.getText().toString();
+
+              }
+         } );
+
+
+        sp = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+
+                    result_sp = sp.setLanguage(new Locale("th"));  // Not support Locale.THAI
+              //      Toast.makeText(getActivity(), "No Error", Toast.LENGTH_SHORT).show();
+
+                }
 
             }
         });
+
+      /*  speak = "ยินดีต้อนรับ";// editText.getText().toString();
+        speak(speak);*/
+
+
 
 
         return rootView;
 
 
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setAlarm(int m, int h){
+        android.icu.util.Calendar calendar = android.icu.util.Calendar.getInstance(); // requires API level 24
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        calendar.set(android.icu.util.Calendar.HOUR_OF_DAY,h);
+
+        calendar.set(android.icu.util.Calendar.MINUTE,m);
+        Intent intent = new Intent(getActivity(),myReceiver.class);
+        alarmintent = PendingIntent.getBroadcast(getActivity(),0,intent,0);
+        alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        // alarmManager.set(AlarmManager.RTC,calendar.getTimeInMillis(),alarmintent);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME,
+                SystemClock.elapsedRealtime()+ 2 *1000,alarmintent);
+
+//        Toast.makeText(getActivity(), h+"+"+m, Toast.LENGTH_SHORT).show();
+
+    }
+    public void speak(String text){
+        if (text == null || text == "")  Toast.makeText(getActivity(),"Nulll", Toast.LENGTH_SHORT).show();
+        //else sp.speak(text,TextToSpeech.QUEUE_FLUSH,null);QUEUE_ADD
+        else sp.speak(text,TextToSpeech.QUEUE_ADD,null);
     }
 
     @Override
@@ -177,6 +269,14 @@ public class FragmentDatail extends Fragment {
        editor.putString("callory_day", Double.toString(callory_day));
 
        editor.commit();
+
+
+
+        if(sp !=null){
+            sp.stop();
+            sp.shutdown();
+
+        }
 
     }
 
@@ -205,6 +305,8 @@ public class FragmentDatail extends Fragment {
         builder.setNegativeButton("ตกลง", null);
 
         builder.show();
+        speak("คุณกินเยอะเกินไปแล้วนะ");
+
     }
 
     public void alertDetail(String text){
@@ -221,9 +323,10 @@ public class FragmentDatail extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 callory_day += cal_json;
 
-                DateFormat df = new SimpleDateFormat("yyyy/MM/dd  'at' HH/mm/ss");
+                DateFormat df = new SimpleDateFormat("yyyy/MM/dd  HH/mm/ss");
                 String date = df.format(Calendar.getInstance().getTime());
 
+                speak("อาหารที่สุ่มได้คือ "+food);
                 if (callory_day > bmr_result){
                     alert2();
                 }
@@ -331,5 +434,55 @@ public class FragmentDatail extends Fragment {
     }
 
 
+    private void DialogInput(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("StickBurn :: เพิ่มชื่ออาหาร");
 
+
+        final EditText input = new EditText(getActivity());
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+
+
+        builder.setPositiveButton("ยืนยัน", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String  food_text = input.getText().toString();
+
+             //   Toast.makeText(getActivity(), m_Text, Toast.LENGTH_SHORT).show();
+                cal_getString  = "0" ;
+
+                DateFormat df = new SimpleDateFormat("yyyy/MM/dd  HH/mm/ss");
+                String date = df.format(Calendar.getInstance().getTime());
+
+                mDB = FirebaseDatabase.getInstance().getReference(id); // อ้างอิง ถ้าไม่มใีส่อะไรจะอ้างอิงไปที่ Root Node ถ้าใส่ ที่ Referrenc คือที่ๆจะอ้างอิง
+                final save_history test = new save_history(food_text ,  cal_getString,date);
+
+
+                DateFormat df2 = new SimpleDateFormat("HHmmss");
+                mDB.child(id + "_"+df2.format(Calendar.getInstance().getTime())).setValue(test);
+
+
+            }
+        });
+        builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+            }
+
+// TTS
+    @Override
+    public void onInit(int status) {
+        if(status == TextToSpeech.SUCCESS) {
+            // Do something here
+        }
+    }
 }
