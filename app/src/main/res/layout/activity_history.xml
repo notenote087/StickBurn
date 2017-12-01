@@ -6,9 +6,4 @@
     android:layout_height="match_parent"
     tools:context="com.example.admin.stickburn.history">
 
-    <ListView
-        android:layout_width="341dp"
-        android:layout_height="471dp"
-        tools:layout_editor_absoluteX="22dp"
-        tools:layout_editor_absoluteY="20dp" />
 </android.support.constraint.ConstraintLayout>
