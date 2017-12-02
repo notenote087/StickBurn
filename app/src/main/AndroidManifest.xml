@@ -23,6 +23,7 @@
         <activity android:name=".history" />
         <activity android:name=".FragmentDatail" />
         <activity android:name=".FragmentHistory"></activity>
+        <activity android:name=".Edit"></activity>
     </application>
 
 </manifest>

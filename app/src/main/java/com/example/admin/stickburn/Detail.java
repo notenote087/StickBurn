@@ -9,14 +9,15 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 public class Detail extends AppCompatActivity {
-
+    FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        FragmentManager fragmentManager = getSupportFragmentManager();
+       // FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         MyFragmentAdapter myFragmentAdapter = new MyFragmentAdapter(fragmentManager);
         viewPager.setAdapter(myFragmentAdapter);
 
@@ -49,4 +50,16 @@ public class Detail extends AppCompatActivity {
         fragDetail.FragmentDatail(name);
         fragDetail.setArguments(bundle);*/
     }
+
+
+
+
+    @Override
+    protected void onDestroy() {
+
+       finish();
+        super.onDestroy();
+    }
+
+
 }

@@ -13,10 +13,11 @@ class CallFucntion {
 
 
 
-    public  double CalBMI(int h , int w){
-            double result = 0.0 ;
-            double h_2 = h /100 ;
-            result = w / (h_2 * h_2);
+    public  double CalBMI(int h , int w){  //175 68
+            double result = 0.00 ;
+            float height = h / 100.00f;  // .00f สัส
+
+            result = w /Math.pow(height,2);
 
         return result;
     }
@@ -30,6 +31,7 @@ class CallFucntion {
         else if(result >= 18.5 && result <= 24.9){resultBMI = "ดัชนีมวลกายคือ เริ่มจะอวบ" ;}
         else if(result >= 25 && result <=29.9){resultBMI = "ดัชนีมวลกายคือ อวบระยะสุดท้าย" ;}
         else if(result > 30){ resultBMI = "ดัชนีมวลกายคือ อ้วนอันตราย" ;}
+
         return resultBMI;
 
 

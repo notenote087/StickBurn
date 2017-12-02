@@ -31,10 +31,9 @@ public class FragmentHistory extends Fragment {
 
    // TextView  t;
     ListView l;
-
-
+    String id ;
+    ArrayAdapter itemsAdapter ;
     ArrayList<String> myArrList=new ArrayList<>();
-
 
     SharedPreferences share ;
 
@@ -49,8 +48,9 @@ public class FragmentHistory extends Fragment {
         share = this.getActivity().getSharedPreferences("Pref", Context.MODE_PRIVATE);
 
 
-       String id = share.getString("id","no") ;
+      id = share.getString("id","no") ;
       mDB = FirebaseDatabase.getInstance().getReference().child(id) ;//.child("leixoes");
+
         mDB.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {  // ข้อมูลจะยุนี้ dataSnapshot
@@ -63,11 +63,15 @@ public class FragmentHistory extends Fragment {
                // t.setText(data);
 
                 myArrList.add(data);
-                ArrayAdapter itemsAdapter = new ArrayAdapter(getActivity(),
+
+               itemsAdapter = new ArrayAdapter<>(getActivity(),
                         android.R.layout.simple_list_item_1,
                         myArrList);
 
-                l.setAdapter(itemsAdapter);
+               /* itemsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
+                        myArrList);*/
+
+                 l.setAdapter(itemsAdapter);
 
             }   // เมื่อมีการแอด หรือเปลี่ยนแปลงข้อมูงจะทำที่นี้
 
@@ -85,4 +89,52 @@ public class FragmentHistory extends Fragment {
     }
 
 
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().finish();
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mDB = FirebaseDatabase.getInstance().getReference().child(id) ;//.child("leixoes");
+
+        mDB.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {  // ข้อมูลจะยุนี้ dataSnapshot
+                myArrList.clear();
+
+                String data = "";
+                for (DataSnapshot childSnap : dataSnapshot.getChildren()) { // ตราบใดที่ getChilderen ได้คือยังมีข้อมูล
+                    save_history user = childSnap.getValue(save_history.class);
+                    data += user.date_ + " " + "\n" + user.food + " " + user.cal +" กิโลแคลอรี่ "+ "\n"+"\n";
+                }
+                // t.setText(data);
+
+                myArrList.add(data);
+
+                ArrayAdapter itemsAdapter = new ArrayAdapter(getActivity(),
+                        android.R.layout.simple_list_item_1,
+                        myArrList);
+
+               /* itemsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
+                        myArrList);*/
+
+                l.setAdapter(itemsAdapter);
+
+            }   // เมื่อมีการแอด หรือเปลี่ยนแปลงข้อมูงจะทำที่นี้
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 }

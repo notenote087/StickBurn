@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +57,10 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListener {
+
+    private String TAG = MainActivity.class.getSimpleName();
+    private static final String URL = "https://notenonthawat.000webhostapp.com/randomfood.php";
+
     DatabaseReference mDB ;
     sqlLite sql_class ;
     String cal_share ;
@@ -84,6 +89,7 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
     String speak = "";
     int result_sp ;
 
+    ImageView edit_ ;
 
     public FragmentDatail(){
 
@@ -110,21 +116,7 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
         prg = new ProgressDialog(getActivity());
         prg.setMessage("รอสักครู่...");
         prg.setCancelable(false);
-        //   Bundle bundle = getArguments();
-     /*  String name = bundle.getString("name");
-        int age = this.getArguments().getInt("age");
 
-        String sex = this.getArguments().getString("sex");
-        Double w = this.getArguments().getDouble("w");
-        Double h = this.getArguments().getDouble("h");
-
-        showText(name,sex,w,h,age);
-
-*/
-   /*     Toast.makeText(getActivity(), n2, Toast.LENGTH_SHORT).show();
-     if (bundle == null) {
-        // Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
-     }*/
         share = this.getActivity().getSharedPreferences("Pref", Context.MODE_PRIVATE);
 
 
@@ -134,6 +126,7 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
         String a = share.getString("age","0");
         String s = share.getString("sex","0");
         String n = share.getString("name","0");
+
         cal_share = share.getString("callory_day","0") ;
 
         name = (TextView) rootView.findViewById(R.id.name_f);
@@ -152,8 +145,13 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
 
         int w_bmi = Integer.parseInt(w);
         int h_bmi = Integer.parseInt(h);
+     //   Toast.makeText(getActivity(), Integer.toString(w_bmi) + " " + Integer.toString(h_bmi)   , Toast.LENGTH_SHORT).show();
        double resultBMI =  c.CalBMI(h_bmi,w_bmi);
-        //Toast.makeText(getActivity(), Double.toString(resultBMI), Toast.LENGTH_SHORT).show();
+
+
+
+
+    //    Toast.makeText(getActivity(), Double.toString(resultBMI), Toast.LENGTH_SHORT).show();
        String bmi_text = c.ResultBMI(resultBMI);
 
         bmi = (TextView) rootView.findViewById(R.id.bmi_f);
@@ -162,14 +160,14 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
         int a_bmr = Integer.parseInt(a);
         bmr_result =  c.BMR(h_bmi , w_bmi ,s ,a_bmr) ;
         bmr = (TextView) rootView.findViewById(R.id.bmr_f);
-        bmr.setText("ปริมาณแคลลอรี่ที่เหมาะสม: "+bmr_result );
+        bmr.setText("ปริมาณแคลลอรี่ที่เหมาะสม: \n"+bmr_result + " กิโลแคลลอรี่");
 
 
         cal_day = (TextView) rootView.findViewById(R.id.cal_day);
 
         callory_day = Double.parseDouble(cal_share);
 
-        cal_day.setText("คุณได้รับไปแล้ว: "+callory_day);
+        cal_day.setText("คุณได้รับไปแล้ว: \n"+callory_day + " กิโลแคลลอรี่");
        // cal_day.setText("คุณได้รับไปแล้ว: "+cal_share);
         confirm = (Button) rootView.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener()
@@ -178,16 +176,10 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
             @Override
             public void onClick(View v)
             {
-              prg.show();
+                prg.show();
                 json_request();
                 setAlarm(20,1);
-                // myReciever ;
-               /* Intent intent = new Intent(getActivity(),myReceiver.class);
-                alarmintent = PendingIntent.getBroadcast(getActivity(),0,intent,0);
-                alarmManager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
-                // alarmManager.set(AlarmManager.RTC,calendar.getTimeInMillis(),alarmintent);
-                alarmManager.set(AlarmManager.ELAPSED_REALTIME,
-                        SystemClock.elapsedRealtime()+ 2 *1000,alarmintent);*/
+
             }
         });
 
@@ -198,13 +190,8 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
                 public void onClick(View v) {
                   DialogInput();
 
-                    setAlarm(40,1);
-                   /* Date currentTime = Calendar.getInstance().getTime();
+                    setAlarm(59,23);
 
-                    int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                    String hhh = Integer.toString(hour);
-                    alertDetail(hhh);*/
-                   // speak = "ยินดีต้อนรับ";// editText.getText().toString();
 
               }
          } );
@@ -229,6 +216,20 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
 
 
 
+        ImageView edit_ = (ImageView) rootView.findViewById(R.id.imageView4);
+        edit_.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+           /*     Toast.makeText(v.getContext(), // <- Line changed
+                        "The favorite list would appear on clicking this icon",
+                        Toast.LENGTH_LONG).show();*/
+                Intent startEdit = new Intent(getActivity(),Edit.class);
+                startActivity(startEdit);
+
+            }
+        });
+        alertWelcome(n);
         return rootView;
 
 
@@ -255,6 +256,12 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
         if (text == null || text == "")  Toast.makeText(getActivity(),"Nulll", Toast.LENGTH_SHORT).show();
         //else sp.speak(text,TextToSpeech.QUEUE_FLUSH,null);QUEUE_ADD
         else sp.speak(text,TextToSpeech.QUEUE_ADD,null);
+    }
+
+    public void speak2(String text){
+        if (text == null || text == "")  Toast.makeText(getActivity(),"Nulll", Toast.LENGTH_SHORT).show();
+            else sp.speak(text,TextToSpeech.QUEUE_FLUSH,null);
+       // else sp.speak(text,TextToSpeech.QUEUE_ADD,null);
     }
 
     @Override
@@ -289,12 +296,25 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
 
 
        editor.commit();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         //cal_share = share.getString("callory_day","0") ;
+
+    }
+
+
+    public void alertWelcome(String n){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(" StickBurn");
+        builder.setMessage("ยินดีต้อนรับคุณ " + n);
+        builder.setNegativeButton("ตกลง", null);
+
+        builder.show();
+        speak2("ยินดีต้อนรับ");
 
     }
 
@@ -344,7 +364,7 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
                 DateFormat df2 = new SimpleDateFormat("HHmmss");
                 mDB.child(id + "_"+df2.format(Calendar.getInstance().getTime())).setValue(test);
 
-                Intent intent1 = new Intent(getActivity(),FragmentDatail.class);
+                Intent intent1 = new Intent(getActivity(),Splash.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getContext(),0,intent1, PendingIntent.FLAG_CANCEL_CURRENT);
                 NotificationCompat.Builder builder =
                         new NotificationCompat.Builder(getActivity().getApplicationContext())
@@ -367,9 +387,6 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
     }
 
 
-
-    private String TAG = MainActivity.class.getSimpleName();
-    private static final String URL = "https://notenonthawat.000webhostapp.com/randomfood.php";
 
 
     private void json_request(){
