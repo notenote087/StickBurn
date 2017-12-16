@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String TAG = MainActivity.class.getSimpleName();
     private static final String URL = "https://notenonthawat.000webhostapp.com/register.php";
+  // private static final String URL = "http://notestickburn.epizy.com/stickburn/register.php";
     private ProgressDialog prg ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         prg.setMessage("รอสักครู่...");
         prg.setCancelable(false);
 
-        sql = new sqlLite(this, "stickburn.db", null, 1);
+      //  sql = new sqlLite(this, "stickburn.db", null, 1);
 
 
         B_confirm.setOnClickListener(new View.OnClickListener(){
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                        // j.getJSONObject("dataUser");
 
                        String result = j.getString("result");
-                      // Toast.makeText(getApplicationContext(), result + " " + userID, Toast.LENGTH_LONG).show();
+                    //   Toast.makeText(getApplicationContext(), result + " " + userID, Toast.LENGTH_LONG).show();
 
                        editor.putString("id", userID);
                        editor.commit();
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                    VolleyLog.d(TAG, error.toString());
 
                    prg.hide();
-                   alertDetail("ผิดพลาด");
+                   alertDetail("ผิดพลาด " + error.toString());
                    h.setText("");
                    w.setText("");
                    name.setText("");

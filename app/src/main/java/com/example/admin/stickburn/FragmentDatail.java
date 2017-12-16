@@ -60,7 +60,7 @@ public class FragmentDatail extends Fragment implements TextToSpeech.OnInitListe
 
     private String TAG = MainActivity.class.getSimpleName();
     private static final String URL = "https://notenonthawat.000webhostapp.com/randomfood.php";
-
+    //private static final String URL = "http://notestickburn.epizy.com/stickburn/randomfood.php";
     DatabaseReference mDB ;
     sqlLite sql_class ;
     String cal_share ;
